@@ -79,6 +79,7 @@ pip install .
 Документация настроена через Sphinx в папке `docs/`.
 
 Sphinx подключен к Setuptools через файл `setup.py`, где зарегистрирована команда `build_sphinx`.
+Команда вызывает Sphinx через современный модуль `sphinx.cmd.build`.
 
 Сборка HTML-документации:
 
