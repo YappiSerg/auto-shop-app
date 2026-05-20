@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Машины клиента: {{ client.full_name }}</h2>
+<form method="POST" action="{{ url_for('add_car') }}">
+    <input type="hidden" name="client_id" value="{{ client.id }}">
+    <p><label>Марка:</label> <input name="brand" required></p>
+    <p><label>Модель:</label> <input name="model" required></p>
+    <p><label>Год:</label> <input name="year" type="number"></p>
+    <p><label>VIN:</label> <input name="vin" maxlength="17"></p>
+    <button type="submit">Добавить машину</button>
+</form>
+<hr>
+<h3>Список машин</h3>
+<ul>
+{% if cars[0] %}
+{% for car in cars %}
+<li>{{ car.brand }} {{ car.model }} ({{ car.year or '-' }}), VIN: {{ car.vin or '-' }}</li>
+{% endfor %}
+{% else %}
+<li>У клиента нет автомобилей</li>
+{% endif %}
+</ul>
+{% endblock %}

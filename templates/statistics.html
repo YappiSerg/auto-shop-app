@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Статистика</h2>
+<div>Суммарный доход - {{ "%.2f"|format(total_revenue) }} ₽</div>
+<div>Уникальных посетителей - {{ total_clients }}</div>
+
+<h3>Продажи запчастей</h3>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; margin-top: 15px; width: 100%;">
+    <thead>
+        <tr>
+            <th>Запчасть</th>
+            <th>Артикул</th>
+            <th>Цена</th>
+            <th>Продано</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in parts_sales %}
+        <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.article or '-' }}</td>
+            <td>{{ "%.2f"|format(p.price) }} ₽</td>
+            <td>{{ p.total_sold|int }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">Нет данных</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h3>Оказанные услуги</h3>
+<table  border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; margin-top: 15px; width: 100%;">
+    <thead>
+        <tr>
+            <th>Услуга</th>
+            <th>Цена</th>
+            <th>Оказана</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in services_sales %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ "%.2f"|format(s.price) }} ₽</td>
+            <td>{{ s.total_done|int }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3">Нет данных</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Выполненные заказы по сотрудникам</h3>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; margin-top: 15px; width: 100%;">
+    <thead>
+        <tr>
+            <th>Сотрудник</th>
+            <th>Заказов выполнено</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in employees_stats %}
+        <tr>
+            <td>{{ e.full_name or '-' }}</td>
+            <td>{{ e.orders_done|int }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="2">Нет данных</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

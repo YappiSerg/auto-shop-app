@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Новый заказ</h2>
+
+<form method="POST" action="{{ url_for('new_order_form') }}">
+    <p>
+        <label>Клиент:</label>
+        <select name="client_id" required>
+            <option value="">- выберите -</option>
+            {% for c in clients %}
+            <option value="{{ c.id }}" {% if selected_client_id == c.id|string %}selected{% endif %}>
+                {{ c.full_name }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if not selected_client_id %}
+        <button type="submit">Показать машины</button>
+        {% endif %}
+    </p>
+
+    {% if selected_client_id %}
+    <p>
+        <label>Машина:</label>
+        <select name="car_id" required>
+            <option value="">- выберите -</option>
+            {% for car in cars %}
+            <option value="{{ car.id }}">
+                {{ car.brand }} {{ car.model }} ({{ car.year or '-' }}){% if car.vin %} - VIN: {{ car.vin }}{% endif %}
+            </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p><label>Описание:</label> <textarea name="description" rows="2">{{ request.form.description }}</textarea></p>
+
+    <h3>Услуги</h3>
+    {% for s in services %}
+    <label>
+        <input type="checkbox" name="service_ids" value="{{ s.id }}">
+        {{ s.name }} ({{ s.price }} руб.)
+    </label><br>
+    {% endfor %}
+
+    <h3>Запчасти</h3>
+    {% for p in parts %}
+    <label>
+        <input type="checkbox" name="part_ids" value="{{ p.id }}" onchange="document.getElementById('qty_{{ p.id }}').disabled = !this.checked">
+        {{ p.name }} (арт. {{ p.article or '-' }}, {{ p.price }} руб.)
+    </label>
+    <input type="number" name="quantities" id="qty_{{ p.id }}" value="1" min="1" disabled><br>
+    {% endfor %}
+
+    <h3>Сотрудники</h3>
+    {% for e in employees %}
+    <label>
+        <input type="checkbox" name="employee_ids" value="{{ e.id }}">
+        {{ e.full_name }}
+    </label><br>
+    {% endfor %}
+
+    {% if selected_client_id %}
+    <button type="submit" formaction="{{ url_for('create_order') }}" style="background:#4CAF50;color:white">
+        Оформить заказ
+    </button>
+    {% endif %}
+
+    {% else %}
+    <p><em>Выберите клиента, чтобы начать заполнение формы.</em></p>
+    {% endif %}
+
+</form>
+{% endblock %}

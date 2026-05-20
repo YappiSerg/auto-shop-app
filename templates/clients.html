@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Клиенты</h2>
+<form method="POST" action="{{ url_for('add_client') }}">
+    <h3>Добавить клиента</h3>
+    <p><label>ФИО:</label> <input name="full_name" required></p>
+    <p><label>Телефон:</label> <input name="phone"></p>
+    <p><label>Email:</label> <input name="email"></p>
+    <p><label>Адрес:</label> <input name="address"></p>
+    <button type="submit">Добавить</button>
+</form>
+<hr>
+<h3>Список клиентов</h3>
+<ul>
+{% for c in clients %}
+<li>
+    <strong>{{ c.full_name }}</strong>
+    (тел: {{ c.phone or '-' }}, email: {{ c.email or '-' }})
+    <a href="{{ url_for('cars', client_id=c.id) }}">[машины]</a>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

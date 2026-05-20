@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Все заказы</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; margin-top: 15px; width: 100%;">
+    <thead>
+        <tr style="background-color: #f0f0f0;">
+            <th>ID</th>
+            <th>Клиент</th>
+            <th>Машина</th>
+            <th>Описание</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Статус</th>
+            <th>Сумма</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <td><strong>{{ o.id }}</strong></td>
+            <td>{{ o.client_name }}</td>
+            <td>{{ o.car }}</td>
+            <td>{{ o.description or '-' }}</td>
+            <td>{{ o.started_at.strftime('%d.%m.%Y %H:%M') if o.started_at else '' }}</td>
+            <td>
+                {% if o.completed_at %}
+                    {{ o.completed_at.strftime('%d.%m.%Y %H:%M') }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if o.completed_at %}
+                    Завершён
+                {% else %}
+                    В работе
+                {% endif %}
+            </td>
+            <td>
+                {% if o.total_amount is not none %}
+                    {{ "%.2f"|format(o.total_amount) }} ₽
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>
+                {% if not o.completed_at %}
+                <form method="POST" action="{{ url_for('complete_order', order_id=o.id) }}" style="display:inline;">
+                    <button type="submit">Завершить</button>
+                </form>
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
