@@ -3,3 +3,4 @@ psycopg2-binary>=2.9,<3.0
 build>=1.2,<2.0
 setuptools>=69
 wheel>=0.42
+Sphinx>=7.0,<9.0
