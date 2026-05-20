@@ -1,9 +1,10 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
-DATABASE_URL = "postgresql://postgres:2006@localhost/car_service"
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:2006@localhost/car_service")
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
