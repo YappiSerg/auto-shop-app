@@ -8,7 +8,8 @@ services:
       POSTGRES_DB: car_service
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./dataset.sql:/docker-entrypoint-initdb.d/dataset.sql
+      - ./dataset.sql:/docker-entrypoint-initdb.d/dataset.dump
+      - ./docker/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     ports:
       - "5432:5432"
 
