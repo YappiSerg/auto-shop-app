@@ -1,87 +1,200 @@
 # Auto Shop App
 
-Flask application for managing an auto service shop.
+Веб-приложение на Flask для управления автосервисом.
 
-## Features
+## Возможности
 
-- manages clients;
-- stores client cars;
-- creates repair and service orders;
-- assigns services, parts, and employees to orders;
-- completes orders with automatic total calculation;
-- shows order lists and business statistics.
+- ведение списка клиентов;
+- хранение автомобилей клиентов;
+- создание заказов на ремонт и обслуживание;
+- выбор услуг, запчастей и сотрудников для заказа;
+- завершение заказа с автоматическим расчетом итоговой суммы;
+- просмотр списка заказов;
+- просмотр статистики по выручке, клиентам, услугам, запчастям и сотрудникам.
 
-## Dependencies
+## Требования
 
-Install dependencies:
+- `Flask` - веб-фреймворк;
+- `build` - сборка Python-пакета;
+- `setuptools` и `wheel` - инструменты сборки;
+- `Sphinx` - сборка документации.
 
-```powershell
-pip install -r requirements.txt
-```
+## Локальный запуск
 
-The app uses Python's built-in `sqlite3` module, so no external database driver is required.
-
-## Database
-
-The SQLite schema and seed data are stored in:
-
-```text
-auto_shop_app/schema.sql
-```
-
-By default, the app creates this database on first use:
-
-```text
-auto_shop_app/auto_shop.sqlite3
-```
-
-To use a different database file, set `AUTO_SHOP_DB` before starting the app:
+Перейдите в папку проекта:
 
 ```powershell
-$env:AUTO_SHOP_DB = "C:\path\to\auto_shop.sqlite3"
-py app.py
+cd C:\Users\iloveass2\Desktop\auto-shop-app
 ```
 
-To rebuild a database manually:
+Создайте виртуальное окружение:
 
 ```powershell
-sqlite3 auto_shop_app/auto_shop.sqlite3 ".read auto_shop_app/schema.sql"
+py -m venv .venv
 ```
 
-## Run
-
-Run from the source tree:
+Активируйте окружение:
 
 ```powershell
-py app.py
+.venv\Scripts\Activate.ps1
 ```
 
-The app will be available at:
+Если PowerShell запрещает запуск скрипта активации, выполните один раз:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Затем снова активируйте окружение.
+
+Установите зависимости:
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+Запустите приложение:
+
+```powershell
+python app.py
+```
+
+Приложение будет доступно по адресу:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-After package installation, the command is also available:
+Если команда `python` недоступна, попробуйте:
 
 ```powershell
+py app.py
+```
+
+## База данных SQLite
+
+Схема и начальные данные находятся в файле:
+
+```text
+auto_shop_app/schema.sql
+```
+
+При первом запуске приложение автоматически создает SQLite-базу:
+
+```text
+auto_shop_app/auto_shop.sqlite3
+```
+
+Файл базы данных не добавляется в Git, потому что он указан в `.gitignore`.
+
+Чтобы использовать другой путь к базе данных, задайте переменную окружения `AUTO_SHOP_DB` перед запуском:
+
+```powershell
+$env:AUTO_SHOP_DB = "C:\path\to\auto_shop.sqlite3"
+python app.py
+```
+
+Пересоздать базу вручную можно командой:
+
+```powershell
+sqlite3 auto_shop_app/auto_shop.sqlite3 ".read auto_shop_app/schema.sql"
+```
+
+## Переменные окружения
+
+Приложение поддерживает следующие переменные:
+
+| Переменная | Значение по умолчанию | Назначение |
+| --- | --- | --- |
+| `AUTO_SHOP_DB` | `auto_shop_app/auto_shop.sqlite3` | Путь к файлу SQLite-базы |
+| `FLASK_RUN_HOST` | `127.0.0.1` | Хост, на котором запускается Flask |
+| `FLASK_RUN_PORT` | `5000` | Порт Flask-приложения |
+| `FLASK_DEBUG` | `0` | Режим отладки: `1`, `true` или `yes` включает debug |
+
+Пример запуска на другом порту:
+
+```powershell
+$env:FLASK_RUN_PORT = "8080"
+python app.py
+```
+
+## Запуск через Docker
+
+Соберите Docker-образ:
+
+```powershell
+docker build -t auto-shop-app .
+```
+
+Запустите контейнер:
+
+```powershell
+docker run --rm -p 5000:5000 -v auto-shop-data:/data auto-shop-app
+```
+
+После запуска приложение будет доступно по адресу:
+
+```text
+http://127.0.0.1:5000
+```
+
+В Docker база данных по умолчанию хранится здесь:
+
+```text
+/data/auto_shop.sqlite3
+```
+
+Том `auto-shop-data` нужен, чтобы данные сохранялись после остановки контейнера.
+
+Пример запуска с явными переменными окружения:
+
+```powershell
+docker run --rm `
+  -p 5000:5000 `
+  -v auto-shop-data:/data `
+  -e AUTO_SHOP_DB=/data/auto_shop.sqlite3 `
+  -e FLASK_RUN_HOST=0.0.0.0 `
+  -e FLASK_RUN_PORT=5000 `
+  -e FLASK_DEBUG=0 `
+  auto-shop-app
+```
+
+## Установка как пакет
+
+После установки проекта как Python-пакета будет доступна команда `auto-shop-app`:
+
+```powershell
+python -m pip install .
 auto-shop-app
 ```
 
-## Build
+## Сборка пакета
 
-Build wheel and source distribution:
-
-```powershell
-py -m build
-```
-
-Artifacts are written to `dist/`.
-
-Build HTML documentation:
+Сборка wheel и source distribution:
 
 ```powershell
-py setup.py build_sphinx
+python -m build
 ```
 
-The generated documentation is written to `docs/_build/html`.
+Готовые артефакты появятся в папке:
+
+```text
+dist/
+```
+
+## Сборка документации
+
+Документация находится в папке `docs/` и собирается через Sphinx.
+
+Собрать HTML-документацию:
+
+```powershell
+python setup.py build_sphinx
+```
+
+Готовая документация появится в папке:
+
+```text
+docs/_build/html
+```
