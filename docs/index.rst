@@ -21,7 +21,7 @@ Project Structure
    Entry point for running the application from the source tree.
 
 ``auto_shop_app/``
-   Python package with Flask application code and HTML templates.
+   Python package with Flask application code, HTML templates, and the SQLite schema.
 
 ``pyproject.toml``
    Setuptools package build configuration.
@@ -31,6 +31,14 @@ Project Structure
 
 ``requirements.txt``
    Runtime, build, and documentation dependencies.
+
+Database
+--------
+
+The application uses SQLite through Python's built-in ``sqlite3`` module.
+The schema and seed data are stored in ``auto_shop_app/schema.sql``.
+On first use, the app creates ``auto_shop_app/auto_shop.sqlite3`` unless
+``AUTO_SHOP_DB`` points to a different database file.
 
 Build Commands
 --------------

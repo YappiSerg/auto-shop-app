@@ -1,94 +1,87 @@
 # Auto Shop App
 
-Веб-приложение для управления автосервисом.
+Flask application for managing an auto service shop.
 
-## Что делает
+## Features
 
-- ведет список клиентов;
-- хранит автомобили клиентов;
-- создает заказы на ремонт или обслуживание;
-- позволяет выбирать услуги, запчасти и сотрудников для заказа;
-- завершает заказ с расчетом итоговой суммы;
-- показывает список заказов;
-- показывает статистику по выручке, клиентам, услугам, запчастям и сотрудникам.
+- manages clients;
+- stores client cars;
+- creates repair and service orders;
+- assigns services, parts, and employees to orders;
+- completes orders with automatic total calculation;
+- shows order lists and business statistics.
 
-## Зависимости
+## Dependencies
 
-Основные зависимости проекта перечислены в `requirements.txt`:
-
-- `Flask` - веб-фреймворк;
-- `psycopg2-binary` - подключение к PostgreSQL;
-- `build` - сборка Python-пакета;
-- `setuptools` и `wheel` - система сборки пакета;
-- `Sphinx` - сборка документации.
-
-Установка зависимостей:
+Install dependencies:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-## База данных
+The app uses Python's built-in `sqlite3` module, so no external database driver is required.
 
-Приложение подключается к PostgreSQL по строке из `auto_shop_app/app.py`:
+## Database
 
-```python
-postgresql://postgres:2006@localhost/car_service
+The SQLite schema and seed data are stored in:
+
+```text
+auto_shop_app/schema.sql
 ```
 
-## Запуск
+By default, the app creates this database on first use:
 
-Запуск из исходников:
+```text
+auto_shop_app/auto_shop.sqlite3
+```
+
+To use a different database file, set `AUTO_SHOP_DB` before starting the app:
+
+```powershell
+$env:AUTO_SHOP_DB = "C:\path\to\auto_shop.sqlite3"
+py app.py
+```
+
+To rebuild a database manually:
+
+```powershell
+sqlite3 auto_shop_app/auto_shop.sqlite3 ".read auto_shop_app/schema.sql"
+```
+
+## Run
+
+Run from the source tree:
 
 ```powershell
 py app.py
 ```
 
-После запуска приложение будет доступно по адресу:
+The app will be available at:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-После установки пакета доступна команда:
+After package installation, the command is also available:
 
 ```powershell
 auto-shop-app
 ```
 
-## Сборка пакета
+## Build
 
-Проект настроен для сборки через `setuptools` в файле `pyproject.toml`.
-
-Сборка wheel и sdist:
+Build wheel and source distribution:
 
 ```powershell
 py -m build
 ```
 
-Готовые артефакты появятся в папке `dist/`.
+Artifacts are written to `dist/`.
 
-Локальная установка проекта:
-
-```powershell
-pip install .
-```
-
-## Сборка документации
-
-Документация настроена через Sphinx в папке `docs/`.
-
-Sphinx подключен к Setuptools через файл `setup.py`, где зарегистрирована команда `build_sphinx`.
-Команда вызывает Sphinx через современный модуль `sphinx.cmd.build`.
-
-Сборка HTML-документации:
+Build HTML documentation:
 
 ```powershell
 py setup.py build_sphinx
 ```
 
-Готовая документация появится в папке:
-
-```text
-docs/_build/html
-```
+The generated documentation is written to `docs/_build/html`.

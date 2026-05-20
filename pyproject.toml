@@ -10,7 +10,6 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "Flask>=3.0,<4.0",
-    "psycopg2-binary>=2.9,<3.0",
 ]
 
 [project.scripts]
@@ -21,4 +20,4 @@ packages = ["auto_shop_app"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-auto_shop_app = ["templates/*.html"]
+auto_shop_app = ["templates/*.html", "schema.sql"]

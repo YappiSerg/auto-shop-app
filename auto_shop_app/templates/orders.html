@@ -23,10 +23,10 @@
             <td>{{ o.client_name }}</td>
             <td>{{ o.car }}</td>
             <td>{{ o.description or '-' }}</td>
-            <td>{{ o.started_at.strftime('%d.%m.%Y %H:%M') if o.started_at else '' }}</td>
+            <td>{{ o.started_at or '' }}</td>
             <td>
                 {% if o.completed_at %}
-                    {{ o.completed_at.strftime('%d.%m.%Y %H:%M') }}
+                    {{ o.completed_at }}
                 {% else %}
                     -
                 {% endif %}
